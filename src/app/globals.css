@@ -2,3 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Area Normal'; /* Replace [FONT_NAME] with the actual font name */
+  src: url('/fonts/AreaNormal-Regular.otf') format('opentype'); /* Replace [PATH_TO_FONT_FILE] and [FONT_FORMAT] */
+  /* Add more src declarations for different font weights/styles if needed */
+  font-weight: normal; /* Adjust as needed */
+  font-style: normal; /* Adjust as needed */
+}
+
+@font-face {
+    font-family: 'Archivio';
+    src: url('/fonts/Archivio-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}

@@ -8,6 +8,14 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        areaNormal: ['Area Normal', 'sans-serif'],
+        archivio: ['Archivio', 'sans-serif'],
+      },
+      colors: {
+        primary: '#1A1A1A',
+        secondary: '#3b3b3b',
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
