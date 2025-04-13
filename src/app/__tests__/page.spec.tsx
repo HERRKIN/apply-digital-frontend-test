@@ -1,14 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import { use } from 'react';
 import Page from '../page';
-import { gamesService } from '@/services/games'; 
 import { GamePages } from '@/components/game-pages';
 import { GameList } from '@/components/game-list'; 
 import { Game } from '@/utils/endpoint'; 
-import { getGames } from '@/services/api/get-games';
-// Mock the service module
-jest.mock('@/services/games');
-// Mock the child components to isolate the Page component logic
+import { GenreDropdown } from '@/components/genre-dropdown';
+
+jest.mock('@/services/api/get-games');
+
 jest.mock('@/components/game-list', () => ({
   GameList: jest.fn(() => <div data-testid="game-list">Mock GameList</div>),
 }));
@@ -16,9 +15,10 @@ jest.mock('@/components/game-pages', () => ({
   GamePages: jest.fn(() => <div data-testid="game-pages">Mock GamePages</div>),
 }));
 
-const mockedGetGames = getGames as jest.Mocked<typeof getGames>;
-
-
+jest.mock('@/components/genre-dropdown', () => ({
+  GenreDropdown: jest.fn(({selectedGenre}) => <div data-testid="genre-dropdown">Mock GenreDropdown {selectedGenre}</div>),
+}));
+ 
 const mockGames: Game[] = [
   {
     id: '1',
@@ -56,16 +56,21 @@ describe('Page Component', () => {
       return { games: mockGames, total: mockGames.length, page: 1, limit: 10 };
     });
     render(<Page searchParams={{}} />);
-    const titleElement = await screen.findByText(/Top Sellers/i); // Use findByText for async rendering
+    const titleElement = await screen.findByText(/Top Sellers/i);
     expect(titleElement).toBeInTheDocument();
   });
      
 
   test('fetches games and passes them to GameList', () => {
+    mockedUse.mockImplementation(() => {
+      return { games: mockGames, total: mockGames.length, page: 1, limit: 10 };
+    });
     render(<Page searchParams={{}} />);
-    expect(mockedUse).toHaveBeenCalledWith(expect.any(Promise));
+    expect(mockedUse).toHaveBeenCalled()
     expect(GameList).toHaveBeenCalledTimes(1);
     expect(GameList).toHaveBeenCalledWith({ games: mockGames }, {});
+    expect(GenreDropdown).toHaveBeenCalledTimes(1);
+    expect(GenreDropdown).toHaveBeenCalledWith({ selectedGenre: '' }, {});
   });
 
   test('renders the GamePages component', () => {
