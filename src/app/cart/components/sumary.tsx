@@ -3,14 +3,14 @@ import { useCartStore } from "@/stores/cart.store";
 const Summary = () => {
     const { items } = useCartStore();
     return (
-        <div className="md:col-span-2 border border-gray-400 rounded-md p-4 h-fit xl:col-span-3">
+        <div className="md:col-span-2 border border-gray-400 rounded-md p-4 h-fit">
             <h2 className="text-lg font-bold">Order Summary</h2>
             <h3 className="text-md text-gray-500 mt-2" data-testid="sumary-item-count">{items.length} items</h3>
             <ul className="flex flex-col gap-3 my-6">
                 {items.map((item) => (
                     <li key={item.id} className="flex justify-between">
                         <span>{item.name}</span>
-                        <span>${item.price}</span>
+                        <span className="ml-5">${item.price}</span>
                     </li>
                 ))}
             </ul>

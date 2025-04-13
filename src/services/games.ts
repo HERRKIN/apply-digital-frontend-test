@@ -12,7 +12,7 @@ export const gamesService = {
     getGames: async (page: number = 1, genre: string = ""):Promise<GamesResponse> => {
         const genreQuery = genre.length > 0 ? `&genre=${genre}` : "";
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/games?page=${page}${genreQuery}`);
+        const response = await fetch(`/api/games?page=${page}${genreQuery}`);
         return response.json();
     }
 }

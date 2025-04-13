@@ -4,7 +4,7 @@ import { X } from "lucide-react";
 const CartList = () => {
   const { items } = useCartStore();
   return (
-    <div className="md:col-span-3 flex flex-col gap-10 xl:col-span-7 ">
+    <div className="md:col-span-3 flex flex-col gap-10  ">
       {items.map((item) => (
         <CartItem key={item.id} item={item} />
       ))}
