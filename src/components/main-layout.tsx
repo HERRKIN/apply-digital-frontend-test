@@ -6,9 +6,11 @@ import { Providers } from "./providers";
 export const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <Providers>
-      <Header />
-      {children}
-      <Footer />
+      <div className="flex flex-col flex-1 justify-between min-h-screen">
+        <Header />
+        {children}
+        <Footer />
+      </div>
     </Providers>
   );
 };

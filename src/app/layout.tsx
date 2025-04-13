@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { MainLayout } from "@/components/main-layout";
+import { cn } from "@/utils";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -16,10 +17,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <MainLayout>
-          {children}
-        </MainLayout>
+        <body className={cn(inter.className, "font-archivio")}>
+
+            <MainLayout>
+              {children}
+            </MainLayout>
       </body>
     </html>
   );

@@ -6,7 +6,7 @@ interface CartState {
   items: Game[];
   getTotal: () => number;
   addItem: (item: Game) => void;
-  removeItem: (item: Game) => void;
+  removeItem: (id: string) => void;
   clearCart: () => void;
   isAdded: (id: string) => boolean;
 }
@@ -23,9 +23,9 @@ const useCartStore = create<CartState>()(
           items: [...state.items, item],
         }));
       },
-      removeItem: (item: any) => {
+      removeItem: (id: string) => {
         set((state: any) => ({
-          items: state.items.filter((i: any) => i.id !== item.id),
+          items: state.items.filter((i: any) => i.id !== id),
         }));
       },
       clearCart: () => {

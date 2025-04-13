@@ -18,7 +18,7 @@ describe("Cart Store", () => {
         result.current.addItem({ id: "1", name: "Test Item", price: 10, genre: "Test", image: "Test", description: "Test", isNew: true });
     });
     act(() => {
-        result.current.removeItem({ id: "1", name: "Test Item", price: 10, genre: "Test", image: "Test", description: "Test", isNew: true });
+        result.current.removeItem("1");
     });
     expect(result.current.items).toEqual([]);
     expect(result.current.getTotal()).toEqual(0);
