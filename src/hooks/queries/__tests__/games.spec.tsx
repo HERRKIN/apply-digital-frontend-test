@@ -10,7 +10,7 @@ jest.mock('@/services/games');
 
 describe('useGames Hook', () => {
     test('should return the correct data', () => {
-        const { result } = renderHook(() => useGames(1), {
+        const { result } = renderHook(() => useGames(1, ""), {
             wrapper: ({ children }) => (<Providers>{children}</Providers>)
         });
         expect(result.current.data).toEqual(undefined);
@@ -30,14 +30,14 @@ describe('Games Service', () => {
         const mockData = { games: [{ id: '1', name: 'Game 1', genre: 'Action', image: '', description: '', price: 0, isNew: false }], total: 1, page: 1, limit: 10  };
         const page = 1;
         mockedGamesService.getGames.mockResolvedValue(mockData);
-        const { result } = renderHook(() => useGames(page), {
+        const { result } = renderHook(() => useGames(page, ""), {
             wrapper: ({ children }) => (<Providers>{children}</Providers>)
         });
         await waitFor(() => expect(result.current.isSuccess).toBe(true));
         expect(result.current.data).toEqual(mockData);
         expect(result.current.isLoading).toBe(false);
         expect(result.current.isError).toBe(false);
-        expect(mockedGamesService.getGames).toHaveBeenCalledWith(page);
+        expect(mockedGamesService.getGames).toHaveBeenCalledWith(page, "");
         expect(mockedGamesService.getGames).toHaveBeenCalledTimes(1);
     });
 

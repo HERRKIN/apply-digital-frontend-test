@@ -3,11 +3,13 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { GamePages } from "../game-pages";
 import { Providers } from "../providers";
-import * as useGamesHook from "../../hooks/queries/games"; 
-
+import * as useGamesHook from "../../hooks/queries/games";
+import { ReadonlyURLSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 // Mock the useGames hook
 jest.mock("../../hooks/queries/games");
 const useGamesMock = useGamesHook.useGames as jest.Mock;
+jest.mock("next/navigation");
 
 describe("GamesPage Component", () => {
   beforeEach(() => {
@@ -24,6 +26,11 @@ describe("GamesPage Component", () => {
 
   test("renders no see more button when endReached is triggered", async () => {
     const user = userEvent.setup();
+    (
+      useSearchParams as jest.MockedFunction<typeof useSearchParams>
+    ).mockReturnValue({
+      get: jest.fn().mockReturnValue(""),
+    } as unknown as ReadonlyURLSearchParams);
     useGamesMock.mockReturnValue({
       data: { games: [] },
       isLoading: false,
@@ -37,78 +44,94 @@ describe("GamesPage Component", () => {
     });
 
     const seeMoreButton = screen.getByRole("button", { name: /see more/i });
-    expect(seeMoreButton).toBeInTheDocument(); 
+    expect(seeMoreButton).toBeInTheDocument();
 
     await user.click(seeMoreButton);
 
     await waitFor(() => {
-        expect(useGamesMock).toHaveBeenCalledWith(2); 
+      expect(useGamesMock).toHaveBeenCalledWith(2, "");
     });
 
     await waitFor(() => {
-        expect(screen.queryByRole("button", { name: /see more/i })).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole("button", { name: /see more/i })
+      ).not.toBeInTheDocument();
     });
     expect(screen.getByText(/no more games to show/i)).toBeInTheDocument();
   });
 
   test("loads the next page when 'SEE MORE' is clicked", async () => {
-      const user = userEvent.setup();
-      useGamesMock.mockReturnValue({
-          data: { games: [{ id: 1, name: "Game 1", background_image: "img1.jpg", slug: "game-1" }] }, 
-          isLoading: false,
-          isError: false,
-          isPending: false,
-          error: null,
-      });
+    const user = userEvent.setup();
+    useGamesMock.mockReturnValue({
+      data: {
+        games: [
+          {
+            id: 1,
+            name: "Game 1",
+            background_image: "img1.jpg",
+            slug: "game-1",
+          },
+        ],
+      },
+      isLoading: false,
+      isError: false,
+      isPending: false,
+      error: null,
+    });
+    (useSearchParams as jest.MockedFunction<typeof useSearchParams>).mockReturnValue({
+        get: jest.fn().mockReturnValue(""),
+    } as unknown as ReadonlyURLSearchParams);
+    render(<GamePages />, {
+      wrapper: ({ children }) => <Providers>{children}</Providers>,
+    });
 
-      render(<GamePages />, {
-          wrapper: ({ children }) => <Providers>{children}</Providers>,
-      });
+    const seeMoreButton = screen.getByRole("button", { name: /see more/i });
 
-      const seeMoreButton = screen.getByRole("button", { name: /see more/i });
+    // Click the button to load page 2
+    await user.click(seeMoreButton);
 
-      // Click the button to load page 2
-      await user.click(seeMoreButton);
+    await waitFor(() => {
+      expect(useGamesMock).toHaveBeenCalledWith(2, "");
+    });
 
-      await waitFor(() => {
-          expect(useGamesMock).toHaveBeenCalledWith(2);
-      });
+    // The button should still be visible because we returned data
+    expect(
+      screen.getByRole("button", { name: /see more/i })
+    ).toBeInTheDocument();
 
-      // The button should still be visible because we returned data
-      expect(screen.getByRole("button", { name: /see more/i })).toBeInTheDocument();
-     
-      await waitFor(() => {
-          expect(screen.getByText("Add to Cart")).toBeInTheDocument();
-      });
+    await waitFor(() => {
+      expect(screen.getByText("Add to Cart")).toBeInTheDocument();
+    });
   });
   test("End Reached", async () => {
-      const user = userEvent.setup();
-      useGamesMock.mockReturnValue({
-          data: { games: [] }, 
-          isLoading: false,
-          isError: false,
-          isPending: false,
-          error: null,
-      });
+    const user = userEvent.setup();
+    useGamesMock.mockReturnValue({
+      data: { games: [] },
+      isLoading: false,
+      isError: false,
+      isPending: false,
+      error: null,
+    });
+    (useSearchParams as jest.MockedFunction<typeof useSearchParams>).mockReturnValue({
+        get: jest.fn().mockReturnValue(""),
+    } as unknown as ReadonlyURLSearchParams);
+    render(<GamePages />, {
+      wrapper: ({ children }) => <Providers>{children}</Providers>,
+    });
+    const seeMoreButton = screen.getByRole("button", { name: /see more/i });
 
-      render(<GamePages />, {
-          wrapper: ({ children }) => <Providers>{children}</Providers>,
-      });
-      const seeMoreButton = screen.getByRole("button", { name: /see more/i });
+    // Click the button to load page 2
+    await user.click(seeMoreButton);
 
-      // Click the button to load page 2
-      await user.click(seeMoreButton);
+    await waitFor(() => {
+      expect(useGamesMock).toHaveBeenCalledWith(2, "");
+    });
 
-      await waitFor(() => {
-          expect(useGamesMock).toHaveBeenCalledWith(2);
-      });
+    const seeMoreButton2 = screen.queryByRole("button", { name: /see more/i });
+    expect(seeMoreButton2).toBeNull();
 
-      const seeMoreButton2 = screen.queryByRole("button", { name: /see more/i });
-      expect(seeMoreButton2).toBeNull();
-     
-      await waitFor(() => {
-          expect(screen.getByText("No more games to show")).toBeInTheDocument();
-      });
+    await waitFor(() => {
+      expect(screen.getByText("No more games to show")).toBeInTheDocument();
+    });
   });
 });
-

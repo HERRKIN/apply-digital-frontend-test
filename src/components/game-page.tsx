@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useGames } from "../hooks/queries/games";
 import { GameList } from "./game-list";
 import { Loader } from "./loader";
+import { useSearchParams } from "next/navigation";
 
 
 export const GamePage = ({
@@ -13,7 +14,9 @@ export const GamePage = ({
   page: number;
   onEndReached: () => void;
 }) => {
-  const { data, isError, isLoading, error, isPending } = useGames(page);
+  const searchParams = useSearchParams();
+  const genre = searchParams.get("genre") ?? "";
+  const { data, isError, isLoading, error, isPending } = useGames(page, genre);
   useEffect(() => {
     if (!isPending && !isError && !isLoading && data.games.length === 0) {
       onEndReached();
