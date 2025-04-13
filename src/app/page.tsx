@@ -1,9 +1,14 @@
-import { gamesService } from "@/services/games";
 import { use } from "react";
 import { GameList } from "@/components/game-list";
 import { GamePages } from "@/components/game-pages";
-export default function Home() {
-  const { games } = use(gamesService.getGames())
+import { getGames } from "@/services/api/get-games";
+
+export default function Home(props: { searchParams: { genre?: string | null; page?: number } }) {
+
+  const { games } = use(getGames({
+    genre: props.searchParams.genre ?? null,
+    page: props.searchParams.page
+  }));
 
   return (
     <main className='flex min-h-screen flex-col items-center p-12'>

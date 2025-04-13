@@ -18,4 +18,14 @@ describe('gamesService', () => {
         expect(global.fetch).toHaveBeenCalledWith(`${process.env.NEXT_PUBLIC_API_URL}/api/games?page=1`);
         expect(result.games).toBeDefined();
     });
+    test('should fetch page 2 of games', async () => {
+        (global.fetch as jest.Mock).mockResolvedValue({
+            json: () => Promise.resolve({ games: [] }),
+        });
+
+        const result = await gamesService.getGames(2);
+        expect(result).toBeDefined();
+        expect(global.fetch).toHaveBeenCalledWith(`${process.env.NEXT_PUBLIC_API_URL}/api/games?page=2`);
+        expect(result.games).toBeDefined();
+    });
 });

@@ -4,10 +4,14 @@ import Image from "next/image";
 import { useCartStore } from "../stores/cart.store";
 import { cn } from "@/utils/cn";
 import { CheckIcon } from "lucide-react";
-
+import { useEffect, useState } from "react";
 export default function GameCard({ game }: { game: Game }) {
+  const [isHydrated, setIsHydrated] = useState(false);
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
   const cartStore = useCartStore();
-  const isAdded = cartStore.isAdded(game.id);
+  const isAdded = isHydrated ? cartStore.isAdded(game.id) : false;
   return (
     <div className={cn(
       "flex flex-col border border-gray-400 rounded-md p-4 w-full items-center max-w-[380px] justify-between",
