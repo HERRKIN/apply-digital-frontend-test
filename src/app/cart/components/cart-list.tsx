@@ -21,7 +21,7 @@ const CartItem = ({ item }: { item: Game }) => {
     >
       <div className="md:max-w-[256px] object-cover max-w-[80%] relative">
         <img src={item.image} alt={item.name} />
-        {item.isNew &&  <span className="text-sm text-gray-500 absolute top-2 left-2  bg-white rounded-md px-2 py-1">New</span>}
+        {item.isNew &&  <span className="text-sm text-gray-500 absolute top-2 left-2  bg-stone-100 rounded-md px-2 py-1">New</span>}
       </div>
       <div className="flex flex-col gap-2">
         <span className="text-sm text-gray-500 uppercase font-bold font-archivio">{item.genre}</span>
