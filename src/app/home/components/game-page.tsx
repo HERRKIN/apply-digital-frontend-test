@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
-import { useGames } from "../hooks/queries/games";
+import { useGames } from "../../../hooks/queries/games";
 import { GameList } from "./game-list";
-import { Loader } from "./loader";
+import { Loader } from "../../../components/loader";
 import { useSearchParams } from "next/navigation";
 
 

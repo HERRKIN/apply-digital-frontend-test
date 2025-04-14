@@ -1,6 +1,5 @@
 "use client";
 import { availableFilters } from "@/utils/endpoint";
-import { useRouter } from "next/navigation";
 
 export const GenreDropdown = ({selectedGenre}: { selectedGenre: string }) => {
     const handleGenreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {

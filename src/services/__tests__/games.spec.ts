@@ -1,8 +1,6 @@
 
 import { gamesService } from '../games';
 
-
-
 describe('gamesService', () => {
     beforeEach(() => {
         jest.clearAllMocks();
@@ -15,7 +13,7 @@ describe('gamesService', () => {
 
         const result = await gamesService.getGames();
         expect(result).toBeDefined();
-        expect(global.fetch).toHaveBeenCalledWith(`${process.env.NEXT_PUBLIC_API_URL}/api/games?page=1`);
+        expect(global.fetch).toHaveBeenCalledWith(`/api/games?page=1`);
         expect(result.games).toBeDefined();
     });
     test('should fetch page 2 of games', async () => {
@@ -25,7 +23,7 @@ describe('gamesService', () => {
 
         const result = await gamesService.getGames(2);
         expect(result).toBeDefined();
-        expect(global.fetch).toHaveBeenCalledWith(`${process.env.NEXT_PUBLIC_API_URL}/api/games?page=2`);
+        expect(global.fetch).toHaveBeenCalledWith(`/api/games?page=2`);
         expect(result.games).toBeDefined();
     });
     test('should fetch games with genre', async () => {
@@ -35,7 +33,7 @@ describe('gamesService', () => {
 
         const result = await gamesService.getGames(1, "action");
         expect(result).toBeDefined();
-        expect(global.fetch).toHaveBeenCalledWith(`${process.env.NEXT_PUBLIC_API_URL}/api/games?page=1&genre=action`);
+        expect(global.fetch).toHaveBeenCalledWith(`/api/games?page=1&genre=action`);
         expect(result.games).toBeDefined();
     });
 });

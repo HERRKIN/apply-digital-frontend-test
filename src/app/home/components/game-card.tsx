@@ -1,7 +1,7 @@
 "use client"
 import { Game } from "@/utils/endpoint";
 import Image from "next/image";
-import { useCartStore } from "../stores/cart.store";
+import { useCartStore } from "@/stores/cart.store";
 import { cn } from "@/utils/cn";
 import { CheckIcon } from "lucide-react";
 import { useEffect, useState } from "react";

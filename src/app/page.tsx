@@ -1,8 +1,8 @@
 import { use } from "react";
-import { GameList } from "@/components/game-list";
-import { GamePages } from "@/components/game-pages";
+import { GameList } from "@/app/home/components/game-list";
+import { GamePages } from "@/app/home/components/game-pages";
 import { getGames } from "@/services/api/get-games";
-import { GenreDropdown } from "@/components/genre-dropdown";
+import { GenreDropdown } from "@/app/home/components/genre-dropdown";
 export default function Home(props: { searchParams: { genre?: string | null; page?: number } }) {
 
   const { games } = use(getGames({

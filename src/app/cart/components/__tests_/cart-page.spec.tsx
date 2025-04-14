@@ -1,9 +1,13 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import Cart from "../../page"; // Adjust the import path as necessary
 import { useCartStore } from "@/stores/cart.store";
-
+import { useRouter } from "next/navigation";
 jest.mock("@/stores/cart.store", () => ({
   useCartStore: jest.fn(),
+}));
+
+jest.mock("next/navigation", () => ({
+  useRouter: jest.fn(),
 }));
 
 describe("Cart", () => {
@@ -15,6 +19,12 @@ describe("Cart", () => {
     jest.clearAllMocks();
       (useCartStore as unknown as jest.Mock).mockReturnValue({
         items: mockItems,
+        getTotal: jest.fn().mockReturnValue(mockItems.reduce((acc, item) => acc + item.price, 0)),
+        clearCart: jest.fn(),
+        isAdded: jest.fn().mockReturnValue(true),
+      });
+      (useRouter as unknown as jest.Mock).mockReturnValue({
+        push: jest.fn(),
       });
   });
   test("render back button", () => {
@@ -39,5 +49,19 @@ describe("Cart", () => {
     const backLink = screen.getByText("Back to catalog");
     expect(backLink).toBeInTheDocument();
     expect(backLink.closest("a")).toHaveAttribute("href", "/");
+  });
+  test('renders thanks for your order', async () => {
+    render(<Cart />);
+    const checkoutButton = screen.getByText("Checkout");
+    fireEvent.click(checkoutButton);
+    await waitFor(() => {
+      expect(screen.getByText("Thanks for your order")).toBeInTheDocument();
+    });
+    const acceptButton = screen.getByText("Accept");
+    fireEvent.click(acceptButton);
+    await waitFor(() => {
+      expect(useRouter().push).toHaveBeenCalledWith("/");
+      expect(useCartStore().clearCart).toHaveBeenCalled();
+    });
   });
 });

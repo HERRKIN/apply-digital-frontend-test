@@ -2,12 +2,12 @@ import React, { act } from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { GamePages } from "../game-pages";
-import { Providers } from "../providers";
-import * as useGamesHook from "../../hooks/queries/games";
+import { Providers } from "../../../../components/providers";
+import * as useGamesHook from "../../../../hooks/queries/games";
 import { ReadonlyURLSearchParams } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 // Mock the useGames hook
-jest.mock("../../hooks/queries/games");
+jest.mock("../../../../hooks/queries/games");
 const useGamesMock = useGamesHook.useGames as jest.Mock;
 jest.mock("next/navigation");
 

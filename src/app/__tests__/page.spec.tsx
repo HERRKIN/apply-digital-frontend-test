@@ -1,21 +1,21 @@
 import { render, screen } from '@testing-library/react';
 import { use } from 'react';
 import Page from '../page';
-import { GamePages } from '@/components/game-pages';
-import { GameList } from '@/components/game-list'; 
+import { GamePages } from '@/app/home/components/game-pages';
+import { GameList } from '@/app/home/components/game-list'; 
 import { Game } from '@/utils/endpoint'; 
-import { GenreDropdown } from '@/components/genre-dropdown';
+import { GenreDropdown } from '@/app/home/components/genre-dropdown';
 
 jest.mock('@/services/api/get-games');
 
-jest.mock('@/components/game-list', () => ({
+jest.mock('@/app/home/components/game-list', () => ({
   GameList: jest.fn(() => <div data-testid="game-list">Mock GameList</div>),
 }));
-jest.mock('@/components/game-pages', () => ({
+jest.mock('@/app/home/components/game-pages', () => ({
   GamePages: jest.fn(() => <div data-testid="game-pages">Mock GamePages</div>),
 }));
 
-jest.mock('@/components/genre-dropdown', () => ({
+jest.mock('@/app/home/components/genre-dropdown', () => ({
   GenreDropdown: jest.fn(({selectedGenre}) => <div data-testid="genre-dropdown">Mock GenreDropdown {selectedGenre}</div>),
 }));
  
