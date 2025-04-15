@@ -78,4 +78,19 @@ describe('Page Component', () => {
       expect(GamePages).toHaveBeenCalledTimes(1);
       expect(screen.getByTestId('game-pages')).toBeInTheDocument();
   });
+  test('renders no games found', () => {
+    mockedUse.mockImplementation(() => {
+      return { games: [], total: 0, page: 1, limit: 10 };
+    });
+    render(<Page searchParams={{}} />);
+    expect(screen.getByText(/No games found/i)).toBeInTheDocument();
+  });
+  test('renders no games found for a specific genre', () => {
+    mockedUse.mockImplementation(() => {
+      return { games: [], total: 0, page: 1, limit: 10 };
+    });
+    render(<Page searchParams={{ genre: 'Action' }} />);
+    expect(screen.getByText(/No games found for Action/i)).toBeInTheDocument();
+    expect(screen.getByText(/Back to catalog/i)).toBeInTheDocument();
+  });
 });

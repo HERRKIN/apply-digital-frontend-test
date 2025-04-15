@@ -37,7 +37,7 @@ export const GamePages = () => {
         </button>
       )}
       {endReached && (
-        <div className="text-center text-neutral-500">
+        <div className="text-center text-neutral-400 mt-10 border border-neutral-400 rounded-md p-4 bg-neutral-50">
           No more games to show
         </div>
       )}
